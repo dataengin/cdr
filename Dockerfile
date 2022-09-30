@@ -1,4 +1,4 @@
-FROM debian:10
+FROM ubuntu
 
 RUN apt-get update \
  && apt-get install -y \
@@ -48,11 +48,11 @@ RUN cd /tmp && \
 ENV PORT=8080
 EXPOSE 8080
 USER coder
+WORKDIR /home/coder
+RUN pwd
+RUN echo 'eval "$(starship init bash)"' >> .bashrc
 RUN sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && sudo unzip awscliv2.zip && sudo ./aws/install
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 RUN sudo npm i -g firebase-tools
 RUN curl https://sdk.cloud.google.com | bash
-WORKDIR /home/coder
-RUN pwd
-RUN echo 'eval "$(starship init bash)"' >> .bashrc
 CMD /usr/local/bin/code-server --auth none --disable-telemetry --bind-addr 0.0.0.0:$PORT .
